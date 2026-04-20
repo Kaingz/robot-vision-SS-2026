@@ -1,1 +1,8 @@
-Data files/
+Data_files/
+CMakeFiles/
+.vscode/
+
+*.cmake
+*Cache.*
+
+Makefile
