@@ -193,7 +193,6 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    //int color_mode = alg == STEREO_BM ? 0 : -1;
     Mat img1 = imread(img1_filename, cv::IMREAD_COLOR);
     Mat img2 = imread(img2_filename, cv::IMREAD_COLOR);
 
@@ -270,79 +269,33 @@ int main(int argc, char** argv)
         imwrite("output_task3/right/rectified_right.png", img2);
     }
 
-    // numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : ((img_size.width/8) + 15) & -16;
 
-    // bm->setROI1(roi1);
-    // bm->setROI2(roi2);
-    // bm->setPreFilterCap(31);
-    // bm->setBlockSize(SADWindowSize > 0 ? SADWindowSize : 9);
-    // bm->setMinDisparity(0);
-    // bm->setNumDisparities(numberOfDisparities);
-    // bm->setTextureThreshold(10);
-    // bm->setUniquenessRatio(15);
-    // bm->setSpeckleWindowSize(100);
-    // bm->setSpeckleRange(32);
-    // bm->setDisp12MaxDiff(1);
+std::string py_command = "python3 unimatch/main_stereo.py "
+                             "--checkpoint_dir /tmp "
+                             "--inference_dir_left output_task3/left "
+                             "--inference_dir_right output_task3/right "
+                             "--output_path output_task3/unimatch_output "
+                             "--inference_size 864 1536 "
+                             "--num_scales 2 "
+                             "--reg_refine "
+                             "--num_reg_refine 3 "
+                             "--upsample_factor 4 "
+                             "--attn_splits_list 2 8 "    
+                             "--corr_radius_list -1 4 "   
+                             "--prop_radius_list -1 1 "   
+                             "--resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth";
 
-    // sgbm->setPreFilterCap(63);
-    // int sgbmWinSize = SADWindowSize > 0 ? SADWindowSize : 3;
-    // sgbm->setBlockSize(sgbmWinSize);
+    std::system(py_command.c_str());
 
-    // int cn = img1.channels();
-
-    // sgbm->setP1(8*cn*sgbmWinSize*sgbmWinSize);
-    // sgbm->setP2(32*cn*sgbmWinSize*sgbmWinSize);
-    // sgbm->setMinDisparity(0);
-    // sgbm->setNumDisparities(numberOfDisparities);
-    // sgbm->setUniquenessRatio(10);
-    // sgbm->setSpeckleWindowSize(100);
-    // sgbm->setSpeckleRange(32);
-    // sgbm->setDisp12MaxDiff(1);
-    // if(alg==STEREO_HH)
-    //     sgbm->setMode(StereoSGBM::MODE_HH);
-    // else if(alg==STEREO_SGBM)
-    //     sgbm->setMode(StereoSGBM::MODE_SGBM);
-    // else if(alg==STEREO_HH4)
-    //     sgbm->setMode(StereoSGBM::MODE_HH4);
-    // else if(alg==STEREO_3WAY)
-    //     sgbm->setMode(StereoSGBM::MODE_SGBM_3WAY);
-
-    // Mat disp, disp8;
-    // //Mat img1p, img2p, dispp;
-    // //copyMakeBorder(img1, img1p, 0, 0, numberOfDisparities, 0, IPL_BORDER_REPLICATE);
-    // //copyMakeBorder(img2, img2p, 0, 0, numberOfDisparities, 0, IPL_BORDER_REPLICATE);
-
-    // int64 t = getTickCount();
-    // float disparity_multiplier = 1.0f;
-    // if( alg == STEREO_BM )
-    // {
-    //     bm->compute(img1, img2, disp);
-    //     if (disp.type() == CV_16S)
-    //         disparity_multiplier = 16.0f;
-    // }
-    // else if( alg == STEREO_SGBM || alg == STEREO_HH || alg == STEREO_HH4 || alg == STEREO_3WAY )
-    // {
-    //     sgbm->compute(img1, img2, disp);
-    //     if (disp.type() == CV_16S)
-    //         disparity_multiplier = 16.0f;
-    // }
-    // t = getTickCount() - t;
-    // printf("Time elapsed: %fms\n", t*1000/getTickFrequency());
-    //disp = dispp.colRange(numberOfDisparities, img1p.cols);
-
-    std::system("python3 unimatch/main_stereo.py --inference_dir_left output_task3/left --inference_dir_right output_task3/right --inference_size 736 1280 --output_path output_task3/unimatch_output --resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth");
-
-    std::string yml_path = "output_task3/unimatch_output/rectified_left_disp_raw.yml";
-    
-    cv::FileStorage fs(yml_path, cv::FileStorage::READ);
+    cv::FileStorage fs("output_task3/unimatch_output/rectified_left_disp_raw.yml", cv::FileStorage::READ);
     
     if (!fs.isOpened()) {
         printf("\nERROR: Could not load the raw disparity YML!\n");
         return -1;
     }
 
-    Mat floatDisp;
-    fs["disparity"] >> floatDisp;
+    Mat disp;
+    fs["disparity"] >> disp;
     fs.release();
     
     printf("Successfully loaded Unimatch raw float disparity!\n");
@@ -354,68 +307,12 @@ int main(int argc, char** argv)
         Mat xyz;
         
         // Pass floatDisp directly to the reprojection function
-        reprojectImageTo3D(floatDisp, xyz, Q, true);
+        reprojectImageTo3D(disp, xyz, Q, true);
         
         savePLY(point_cloud_filename.c_str(), xyz, img1);
         printf("\n");
     }
-    //Mat disp = imread("output_task3/unimatch_output/rectified_left_disp.png", cv::IMREAD_UNCHANGED);
-
-    // if( alg != STEREO_VAR )
-    //     disp.convertTo(disp8, CV_8U, 255/(numberOfDisparities*16.));
-    // else
-    //     disp.convertTo(disp8, CV_8U);
-
-    // Mat disp8_3c;
-    // if (color_display)
-    //     cv::applyColorMap(disp8, disp8_3c, COLORMAP_TURBO);
-
-    // if(!disparity_filename.empty())
-    //     imwrite(disparity_filename, color_display ? disp8_3c : disp8);
-
-    // float disparity_multiplier = 256.0f;
-
-    // if(!point_cloud_filename.empty())
-    // {
-    //     printf("storing the point cloud...");
-    //     fflush(stdout);
-    //     Mat xyz;
-    //     Mat floatDisp;
-    //     disp.convertTo(floatDisp, CV_32F, 1.0f / disparity_multiplier);
-    //     reprojectImageTo3D(floatDisp, xyz, Q, true);
-    //     savePLY(point_cloud_filename.c_str(), xyz, img1);
-    //     printf("\n");
-    // }
-
-    // if( !no_display )
-    // {
-    //     std::ostringstream oss;
-    //     oss << "disparity  " << (alg==STEREO_BM ? "bm" :
-    //                              alg==STEREO_SGBM ? "sgbm" :
-    //                              alg==STEREO_HH ? "hh" :
-    //                              alg==STEREO_VAR ? "var" :
-    //                              alg==STEREO_HH4 ? "hh4" :
-    //                              alg==STEREO_3WAY ? "sgbm3way" : "");
-    //     oss << "  blocksize:" << (alg==STEREO_BM ? SADWindowSize : sgbmWinSize);
-    //     oss << "  max-disparity:" << numberOfDisparities;
-    //     std::string disp_name = oss.str();
-
-    //     namedWindow("left", cv::WINDOW_NORMAL);
-    //     imshow("left", img1);
-    //     namedWindow("right", cv::WINDOW_NORMAL);
-    //     imshow("right", img2);
-    //     namedWindow(disp_name, cv::WINDOW_AUTOSIZE);
-    //     imshow(disp_name, color_display ? disp8_3c : disp8);
-
-    //     printf("press ESC key or CTRL+C to close...");
-    //     fflush(stdout);
-    //     printf("\n");
-    //     while(1)
-    //     {
-    //         if(waitKey() == 27) //ESC (prevents closing on actions like taking screenshots)
-    //             break;
-    //     }
-    // }
 
     return 0;
 }
+    
