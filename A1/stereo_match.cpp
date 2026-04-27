@@ -306,8 +306,11 @@ std::string py_command = "python3 unimatch/main_stereo.py "
         fflush(stdout);
         Mat xyz;
         
-        // Pass floatDisp directly to the reprojection function
         reprojectImageTo3D(disp, xyz, Q, true);
+
+        cv::FileStorage fs_xyz("output_task3/unimatch_output/xyz_data.yml", cv::FileStorage::WRITE);
+        fs_xyz.write("xyz", xyz);
+        fs_xyz.release();
         
         savePLY(point_cloud_filename.c_str(), xyz, img1);
         printf("\n");
