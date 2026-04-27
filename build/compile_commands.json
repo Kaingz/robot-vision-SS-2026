@@ -10,5 +10,11 @@
   "command": "/usr/bin/g++  -isystem /usr/local/include/opencv4 -g -o CMakeFiles/stereo_calib.dir/stereo_calib.cpp.o -c /home/mathias/RV/robot-vision-SS-2026/A1/stereo_calib.cpp",
   "file": "/home/mathias/RV/robot-vision-SS-2026/A1/stereo_calib.cpp",
   "output": "CMakeFiles/stereo_calib.dir/stereo_calib.cpp.o"
+},
+{
+  "directory": "/home/mathias/RV/robot-vision-SS-2026/build",
+  "command": "/usr/bin/g++  -isystem /usr/local/include/opencv4 -g -o CMakeFiles/stereo_match.dir/stereo_match.cpp.o -c /home/mathias/RV/robot-vision-SS-2026/A1/stereo_match.cpp",
+  "file": "/home/mathias/RV/robot-vision-SS-2026/A1/stereo_match.cpp",
+  "output": "CMakeFiles/stereo_match.dir/stereo_match.cpp.o"
 }
 ]

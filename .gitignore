@@ -1,6 +1,8 @@
 Data_files/
 CMakeFiles/
 .vscode/
+*.ply
+output_cloud.ply
 
 *.cmake
 *Cache.*

@@ -266,8 +266,8 @@ int main(int argc, char** argv)
         img1 = img1r;
         img2 = img2r;
 
-        imwrite("rectified_left.png", img1);
-        imwrite("rectified_right.png", img2);
+        imwrite("output_task3/left/rectified_left.png", img1);
+        imwrite("output_task3/right/rectified_right.png", img2);
     }
 
     // numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : ((img_size.width/8) + 15) & -16;
@@ -330,9 +330,36 @@ int main(int argc, char** argv)
     // printf("Time elapsed: %fms\n", t*1000/getTickFrequency());
     //disp = dispp.colRange(numberOfDisparities, img1p.cols);
 
-    std::system("python3 unimatch/main_stereo.py --inference_dir_left rectified_left.png --inference_dir_right rectified_right.png --output unimatch_disp.png --resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth");
+    std::system("python3 unimatch/main_stereo.py --inference_dir_left output_task3/left --inference_dir_right output_task3/right --inference_size 736 1280 --output_path output_task3/unimatch_output --resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth");
 
-    Mat disp = imread("unimatch_disp.png", cv::IMREAD_UNCHANGED);
+    std::string yml_path = "output_task3/unimatch_output/rectified_left_disp_raw.yml";
+    
+    cv::FileStorage fs(yml_path, cv::FileStorage::READ);
+    
+    if (!fs.isOpened()) {
+        printf("\nERROR: Could not load the raw disparity YML!\n");
+        return -1;
+    }
+
+    Mat floatDisp;
+    fs["disparity"] >> floatDisp;
+    fs.release();
+    
+    printf("Successfully loaded Unimatch raw float disparity!\n");
+
+    if(!point_cloud_filename.empty())
+    {
+        printf("storing the point cloud...");
+        fflush(stdout);
+        Mat xyz;
+        
+        // Pass floatDisp directly to the reprojection function
+        reprojectImageTo3D(floatDisp, xyz, Q, true);
+        
+        savePLY(point_cloud_filename.c_str(), xyz, img1);
+        printf("\n");
+    }
+    //Mat disp = imread("output_task3/unimatch_output/rectified_left_disp.png", cv::IMREAD_UNCHANGED);
 
     // if( alg != STEREO_VAR )
     //     disp.convertTo(disp8, CV_8U, 255/(numberOfDisparities*16.));
@@ -345,19 +372,20 @@ int main(int argc, char** argv)
 
     // if(!disparity_filename.empty())
     //     imwrite(disparity_filename, color_display ? disp8_3c : disp8);
-    float disparity_multiplier = 256.0f;
 
-    if(!point_cloud_filename.empty())
-    {
-        printf("storing the point cloud...");
-        fflush(stdout);
-        Mat xyz;
-        Mat floatDisp;
-        disp.convertTo(floatDisp, CV_32F, 1.0f / disparity_multiplier);
-        reprojectImageTo3D(floatDisp, xyz, Q, true);
-        savePLY(point_cloud_filename.c_str(), xyz, img1);
-        printf("\n");
-    }
+    // float disparity_multiplier = 256.0f;
+
+    // if(!point_cloud_filename.empty())
+    // {
+    //     printf("storing the point cloud...");
+    //     fflush(stdout);
+    //     Mat xyz;
+    //     Mat floatDisp;
+    //     disp.convertTo(floatDisp, CV_32F, 1.0f / disparity_multiplier);
+    //     reprojectImageTo3D(floatDisp, xyz, Q, true);
+    //     savePLY(point_cloud_filename.c_str(), xyz, img1);
+    //     printf("\n");
+    // }
 
     // if( !no_display )
     // {
