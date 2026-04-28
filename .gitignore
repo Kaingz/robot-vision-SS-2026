@@ -3,6 +3,7 @@ CMakeFiles/
 .vscode/
 *.ply
 output_cloud.ply
+xyz_data.yml
 
 *.cmake
 *Cache.*

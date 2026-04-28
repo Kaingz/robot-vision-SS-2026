@@ -1,0 +1,7 @@
+Height: 1364, 816; 1356, 864; 0.0166m
+
+Width: 1364, 816; 1148, 640; 0.1365m
+
+Length: 1364, 816; 1847, 703; 0.2248m
+
+./stereo_match Data_files/STEREO_DATA/stereo_data/left/picture_000001.png Data_files/STEREO_DATA/stereo_data/right/picture_000001.png -i=intrinsics.yml -e=extrinsics.yml --max-disparity=64 -p=output_cloud.ply
