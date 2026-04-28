@@ -1,0 +1,2 @@
+./camera_calibration config.xml 
+./stereo_calib -w=8 -h=5 -s=30 stereo_calib.xml

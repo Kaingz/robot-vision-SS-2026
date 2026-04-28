@@ -270,20 +270,20 @@ int main(int argc, char** argv)
     }
 
 
-std::string py_command = "python3 unimatch/main_stereo.py "
-                             "--checkpoint_dir /tmp "
-                             "--inference_dir_left output_task3/left "
-                             "--inference_dir_right output_task3/right "
-                             "--output_path output_task3/unimatch_output "
-                             "--inference_size 864 1536 "
-                             "--num_scales 2 "
-                             "--reg_refine "
-                             "--num_reg_refine 3 "
-                             "--upsample_factor 4 "
-                             "--attn_splits_list 2 8 "    
-                             "--corr_radius_list -1 4 "   
-                             "--prop_radius_list -1 1 "
-                             "--resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth";
+    std::string py_command = "python3 unimatch/main_stereo.py "
+                                "--checkpoint_dir /tmp "
+                                "--inference_dir_left output_task3/left "
+                                "--inference_dir_right output_task3/right "
+                                "--output_path output_task3/unimatch_output "
+                                "--inference_size 864 1536 "
+                                "--num_scales 2 "
+                                "--reg_refine "
+                                "--num_reg_refine 3 "
+                                "--upsample_factor 4 "
+                                "--attn_splits_list 2 8 "    
+                                "--corr_radius_list -1 4 "   
+                                "--prop_radius_list -1 1 "
+                                "--resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth";
 
     std::system(py_command.c_str());
 
