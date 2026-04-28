@@ -282,7 +282,7 @@ std::string py_command = "python3 unimatch/main_stereo.py "
                              "--upsample_factor 4 "
                              "--attn_splits_list 2 8 "    
                              "--corr_radius_list -1 4 "   
-                             "--prop_radius_list -1 1 "   
+                             "--prop_radius_list -1 1 "
                              "--resume pretrained/gmstereo-scale2-regrefine3-resumeflowthings-middleburyfthighres-a82bec03.pth";
 
     std::system(py_command.c_str());
