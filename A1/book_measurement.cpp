@@ -2,7 +2,8 @@
 
 using namespace cv;
 
-int main() {
+int main() 
+{
     Mat img = imread("output_task3/left/rectified_left.png", IMREAD_COLOR);
 
     Mat xyz;
@@ -20,10 +21,10 @@ int main() {
     printf("Euclidean distance: %.4f m\n", distance);
 
     Mat measurement_img = img.clone();
+    line(measurement_img, pt1, pt2, Scalar(0, 255, 0), 6);
     circle(measurement_img, pt1, 10, Scalar(0, 0, 255), -1);
     circle(measurement_img, pt2, 10, Scalar(0, 0, 255), -1);
-    line(measurement_img, pt1, pt2, Scalar(0, 255, 0), 6);
-
+    
     imwrite("report_measurement_3.png", measurement_img);
 
     return 0;

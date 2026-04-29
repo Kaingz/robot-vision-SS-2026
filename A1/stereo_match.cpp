@@ -46,14 +46,12 @@ static void savePLY(const char* filename, const Mat& mat, const Mat& img)
 {
     const double max_z = 1.0e4;
     
-    //Count  valid points 
     int valid_points = 0;
     for(int y = 0; y < mat.rows; y++)
     {
         for(int x = 0; x < mat.cols; x++)
         {
             Vec3f point = mat.at<Vec3f>(y, x);
-            // Skip points that are infinitely far away (invalid disparity)
             if(fabs(point[2] - max_z) < FLT_EPSILON || fabs(point[2]) > max_z) continue;
             valid_points++;
         }
@@ -66,7 +64,6 @@ static void savePLY(const char* filename, const Mat& mat, const Mat& img)
         return;
     }
 
-    //PLY Header
     fprintf(fp, "ply\n");
     fprintf(fp, "format ascii 1.0\n");
     fprintf(fp, "element vertex %d\n", valid_points);
@@ -171,11 +168,7 @@ int main(int argc, char** argv)
         printf("Command-line parameter error: The scale factor (--scale=<...>) must be a positive floating-point number\n");
         return -1;
     }
-    // if (SADWindowSize < 1 || SADWindowSize % 2 != 1)
-    // {
-    //     printf("Command-line parameter error: The block size (--blocksize=<...>) must be a positive odd number\n");
-    //     return -1;
-    // }
+
     if( img1_filename.empty() || img2_filename.empty() )
     {
         printf("Command-line parameter error: both left and right images must be specified\n");
@@ -269,7 +262,6 @@ int main(int argc, char** argv)
         imwrite("output_task3/right/rectified_right.png", img2);
     }
 
-
     std::string py_command = "python3 unimatch/main_stereo.py "
                                 "--checkpoint_dir /tmp "
                                 "--inference_dir_left output_task3/left "
@@ -289,20 +281,12 @@ int main(int argc, char** argv)
 
     cv::FileStorage fs("output_task3/unimatch_output/rectified_left_disp_raw.yml", cv::FileStorage::READ);
     
-    if (!fs.isOpened()) {
-        printf("\nERROR: Could not load the raw disparity YML!\n");
-        return -1;
-    }
-
     Mat disp;
     fs["disparity"] >> disp;
     fs.release();
-    
-    printf("Successfully loaded Unimatch raw float disparity!\n");
 
     if(!point_cloud_filename.empty())
     {
-        printf("storing the point cloud...");
         fflush(stdout);
         Mat xyz;
         
