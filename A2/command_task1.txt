@@ -1,0 +1,2 @@
+./assign2_task1 IMG_CAL_DATA/left08.png IMG_CAL_DATA/left10.png
+./assign2_task1 IMG_CAL_DATA/left08.png IMG_CAL_DATA/right08.png
