@@ -122,11 +122,21 @@ int main( int argc, char* argv[] )
             0.000000e+00, 9.808141e+02, 2.331966e+02,
             0.000000e+00, 0.000000e+00, 1.000000e+00
         );
-        Mat K_right = (Mat_<double>(3, 3) <<
-            9.895267e+02, 0.000000e+00, 7.020000e+02,
-            0.000000e+00, 9.878386e+02, 2.455590e+02,
-            0.000000e+00, 0.000000e+00, 1.000000e+00
-        );
+
+        Mat K_right;
+
+        if(selected_image == "right08")
+        {
+            K_right = (Mat_<double>(3, 3) <<
+                9.895267e+02, 0.000000e+00, 7.020000e+02,
+                0.000000e+00, 9.878386e+02, 2.455590e+02,
+                0.000000e+00, 0.000000e+00, 1.000000e+00
+            );
+        }
+        else
+        {
+            K_right = K_left;
+        }
 
         std::vector<Point2f> pts1_norm;
         std::vector<Point2f> pts2_norm;
@@ -140,9 +150,9 @@ int main( int argc, char* argv[] )
 
         std::string output_path = "output_task2/left08_" + selected_image;
 
-        drawLinesAndSaveImg(pts1, pts2, F_8P, img1, img2, std::string(output_path + "_8P" + method));
-        drawLinesAndSaveImg(pts1, pts2, F_8P_Ransac, img1, img2, std::string(output_path + "_8P_Ransac" + method));
-        drawLinesAndSaveImg(pts1, pts2, F_5P_Ransac, img1, img2, std::string(output_path + "_5P_Ransac" + method));
+        drawLinesAndSaveImg(pts1, pts2, F_8P, img1, img2, std::string(output_path + "_8P_All_" + method));
+        drawLinesAndSaveImg(pts1, pts2, F_8P_Ransac, img1, img2, std::string(output_path + "_8P_Ransac_" + method));
+        drawLinesAndSaveImg(pts1, pts2, F_5P_Ransac, img1, img2, std::string(output_path + "_5P_Ransac_" + method));
     }
 
     return 0;
@@ -191,11 +201,11 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
         line(img1, p1, p2, random_color, 1);
         circle(img1, pts1[idx],5,random_color, -1);
 
-        Vec3f& l = lines_right[idx];
-        uint c = img2.cols;
+        l = lines_right[idx];
+        c = img2.cols;
 
-        Point p1(0, -l[2]/l[1]);
-        Point p2(c, -(l[2] + l[0]*c)/l[1]);
+        p1 = Point(0, -l[2]/l[1]);
+        p2 = Point(c, -(l[2] + l[0]*c)/l[1]);
         line(img2, p1, p2, random_color, 1);
         circle(img2, pts2[idx],5,random_color, -1);
     }
@@ -204,7 +214,7 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
 
     hconcat(img1, img2, img_pair);
 
-    imwrite(filename, img_pair);
+    imwrite(filename, img1);
 }
 
 #else
