@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/dominikp/Desktop/robot-vision-SS-2026/A2/build",
+  "command": "/usr/bin/c++  -isystem /usr/local/include/opencv4  -o CMakeFiles/assign2_task1.dir/assign2_task1.cpp.o -c /home/dominikp/Desktop/robot-vision-SS-2026/A2/assign2_task1.cpp",
+  "file": "/home/dominikp/Desktop/robot-vision-SS-2026/A2/assign2_task1.cpp",
+  "output": "CMakeFiles/assign2_task1.dir/assign2_task1.cpp.o"
+},
+{
+  "directory": "/home/dominikp/Desktop/robot-vision-SS-2026/A2/build",
+  "command": "/usr/bin/c++  -isystem /usr/local/include/opencv4  -o CMakeFiles/assign2_task2.dir/assign2_task2.cpp.o -c /home/dominikp/Desktop/robot-vision-SS-2026/A2/assign2_task2.cpp",
+  "file": "/home/dominikp/Desktop/robot-vision-SS-2026/A2/assign2_task2.cpp",
+  "output": "CMakeFiles/assign2_task2.dir/assign2_task2.cpp.o"
+}
+]
