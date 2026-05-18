@@ -148,11 +148,11 @@ int main( int argc, char* argv[] )
 
         Mat F_5P_Ransac = K_right.inv().t() * E_5P_Ransac * K_left.inv();
 
-        std::string output_path = "output_task2/left08_" + selected_image;
+        std::string output_path = "output_task2/left08_" + selected_image + "/";
 
-        drawLinesAndSaveImg(pts1, pts2, F_8P, img1, img2, std::string(output_path + "_8P_All_" + method));
-        drawLinesAndSaveImg(pts1, pts2, F_8P_Ransac, img1, img2, std::string(output_path + "_8P_Ransac_" + method));
-        drawLinesAndSaveImg(pts1, pts2, F_5P_Ransac, img1, img2, std::string(output_path + "_5P_Ransac_" + method));
+        drawLinesAndSaveImg(pts1, pts2, F_8P, img1, img2, std::string(output_path + "8P_All_" + method));
+        drawLinesAndSaveImg(pts1, pts2, F_8P_Ransac, img1, img2, std::string(output_path + "8P_Ransac_" + method));
+        drawLinesAndSaveImg(pts1, pts2, F_5P_Ransac, img1, img2, std::string(output_path + "5P_Ransac_" + method));
     }
 
     return 0;
@@ -206,7 +206,7 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
 
         p1 = Point(0, -l[2]/l[1]);
         p2 = Point(c, -(l[2] + l[0]*c)/l[1]);
-        line(img2, p1, p2, random_color, 1);
+        // line(img2, p1, p2, random_color, 1);
         circle(img2, pts2[idx],5,random_color, -1);
     }
 
@@ -214,7 +214,7 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
 
     hconcat(img1, img2, img_pair);
 
-    imwrite(filename, img1);
+    imwrite(filename, img_pair);
 }
 
 #else
