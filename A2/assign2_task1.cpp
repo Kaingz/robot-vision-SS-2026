@@ -7,8 +7,7 @@
 
 using namespace cv;
 using namespace cv::xfeatures2d;
-using std::cout;
-using std::endl;
+
 
 const char* keys =
     "{ help h |                  | Print help message. }"
@@ -21,7 +20,7 @@ int main( int argc, char* argv[] )
     Mat img2 = imread(argv[2], IMREAD_GRAYSCALE);
     if ( img1.empty() || img2.empty() )
     {
-        cout << "Could not open or find the image!\n" << endl;
+        std::cout << "Could not open image!\n" << std::endl;
         return -1;
     }
 
@@ -90,6 +89,7 @@ int main( int argc, char* argv[] )
         std::vector< std::vector<DMatch> > knn_matches;
         matcher->knnMatch( descriptors1, descriptors2, knn_matches, 2 );
         const float ratio_thresh = 0.7f;
+        
         std::vector<DMatch> good_matches;
         for (size_t i = 0; i < knn_matches.size(); i++)
         {
