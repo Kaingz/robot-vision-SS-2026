@@ -105,7 +105,6 @@ int main( int argc, char* argv[] )
             {
                 good_matches.push_back(knn_matches[i][0]);
 
-                // Task2
                 pts1.push_back(keypoints1[good_matches.back().queryIdx].pt);
                 pts2.push_back(keypoints2[good_matches.back().trainIdx].pt);
             }
@@ -115,7 +114,7 @@ int main( int argc, char* argv[] )
         Mat mask_5P_Ransac;
 
         Mat F_8P = findFundamentalMat(pts1, pts2, FM_8POINT);
-        Mat F_8P_Ransac = findFundamentalMat(pts1, pts2, FM_RANSAC, 3, 0.99, mask_8P_Ransac);
+        Mat F_8P_Ransac = findFundamentalMat(pts1, pts2, FM_RANSAC, 1, 0.99, mask_8P_Ransac);
 
         Mat K_left = (Mat_<double>(3, 3) <<
             9.842439e+02,  0.000000e+00, 6.900000e+02,
@@ -144,7 +143,7 @@ int main( int argc, char* argv[] )
         undistortPoints(pts1, pts1_norm, K_left, cv::noArray());
         undistortPoints(pts2, pts2_norm, K_right, cv::noArray());
 
-        Mat E_5P_Ransac = findEssentialMat(pts1_norm, pts2_norm, Mat::eye(3, 3, CV_64F), RANSAC, 0.99, 1e-3, mask_5P_Ransac);
+        Mat E_5P_Ransac = findEssentialMat(pts1_norm, pts2_norm, Mat::eye(3, 3, CV_64F), RANSAC, 0.999, 1e-3, mask_5P_Ransac);
 
         Mat F_5P_Ransac = K_right.inv().t() * E_5P_Ransac * K_left.inv();
 
@@ -176,7 +175,6 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
     std::uniform_int_distribution dist(0,255);
 
     uint successful_draws = 0;
-    uint i = 0;
 
     while(successful_draws < 20 && random_idx.size() > 0)
     {
@@ -185,7 +183,6 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
 
         if(!mask.empty() && mask.at<uchar>(idx) == 0)
         {
-            i++;
             continue;
         }
 
@@ -193,7 +190,7 @@ void drawLinesAndSaveImg(std::vector<Point2f>& pts1, std::vector<Point2f>& pts2,
         
         cv::Scalar random_color(dist(g), dist(g), dist(g));
 
-        Vec3f& l = lines_left[idx];
+        Vec3f l = lines_left[idx];
         uint c = img1.cols;
 
         Point p1(0, -l[2]/l[1]);
