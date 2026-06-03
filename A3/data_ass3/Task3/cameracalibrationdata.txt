@@ -1,0 +1,3 @@
+Data for depth estimation from disparity images:
+focal length f = 721px
+base length = 0.54m
