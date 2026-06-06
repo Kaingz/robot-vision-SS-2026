@@ -1,6 +1,7 @@
 Data_files/
 CMakeFiles/
 unimatch/
+unidepth/
 .vscode/
 *.ply
 output_cloud.ply
@@ -10,3 +11,6 @@ xyz_data.yml
 *Cache.*
 
 Makefile
+venvs/
+A3/venvs/
+A3/pretrained/
