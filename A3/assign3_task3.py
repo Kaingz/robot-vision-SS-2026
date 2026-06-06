@@ -19,20 +19,20 @@ unidepth_output_path = "output_task3/unidepth_output/"
 unimatch_output_path = "output_task3/unimatch_output/"
 gt_path = "data_ass3/Task3/GT_disparities/disp_noc_0"
 
-# for image_path in sorted(os.listdir(base_path)):
-#     image = torch.from_numpy(np.array(Image.open(base_path + image_path).convert("RGB"))).permute(2, 0, 1).to(device)
+for image_path in sorted(os.listdir(base_path)):
+    image = torch.from_numpy(np.array(Image.open(base_path + image_path).convert("RGB"))).permute(2, 0, 1).to(device)
 
-#     predictions = model.infer(image)
+    predictions = model.infer(image)
 
-#     depth = predictions["depth"].squeeze().cpu().numpy()
-#     np.save("output_task3/unidepth_output/" + image_path[:-4], depth)
+    depth = predictions["depth"].squeeze().cpu().numpy()
+    np.save("output_task3/unidepth_output/" + image_path[:-4], depth)
 
-#     depth_normalized = cv2.normalize(depth, None, 0, 255, cv2.NORM_MINMAX)
-#     depth_visual = depth_normalized.astype(np.uint8)
+    depth_normalized = cv2.normalize(depth, None, 0, 255, cv2.NORM_MINMAX)
+    depth_visual = depth_normalized.astype(np.uint8)
 
-#     depth_colored = cv2.applyColorMap(depth_visual, cv2.COLORMAP_INFERNO)
+    depth_colored = cv2.applyColorMap(depth_visual, cv2.COLORMAP_INFERNO)
 
-#     cv2.imwrite("output_task3/unidepth_output/" + image_path, depth_colored)
+    cv2.imwrite("output_task3/unidepth_output/" + image_path, depth_colored)
 
 # Construct Depth Images
 
