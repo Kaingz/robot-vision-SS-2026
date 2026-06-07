@@ -59,7 +59,8 @@ for filename in sorted(os.listdir(unidepth_output_path)):
 for filename in sorted(os.listdir(unimatch_output_path)):
     if filename.endswith('.pfm'):
         disp = read_disp(os.path.join(unimatch_output_path, filename))
-        depth = np.where(disp > 0, f * B / disp, 0)
+        depth = np.zeros_like(disp, dtype=float)
+        depth[disp>0.0] = f * B / disp[disp>0.0]
         mask = (depth > 0.0) & (depth < 120.0)
         unimatch_masks.append(mask)
         unimatch_depth_images.append(depth)
@@ -67,7 +68,7 @@ for filename in sorted(os.listdir(unimatch_output_path)):
 for filename in sorted(os.listdir(gt_path)):
     gt = cv2.imread(os.path.join(gt_path, filename), cv2.IMREAD_ANYDEPTH).astype(np.float32)
     gt = gt / 256.0
-    gt = np.where(gt > 0, f * B / gt, 0)
+    gt[gt>0.0] = f * B / gt[gt>0.0]
     mask = (gt > 0.0) & (gt < 120.0)
     gt_masks.append(mask)
 
