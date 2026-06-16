@@ -34,6 +34,7 @@ for i in range(len(depths_paths)):
 
     gt = gt.astype(float) / 256.0
 
+    # Apply mask and calculate rmse
     mask = (gt > 0) & (gt < 120.0)
 
     gt = gt[mask]
