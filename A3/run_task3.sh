@@ -1,5 +1,6 @@
 #!/bin/bash
 
+find output_task1 -type f -delete
 find output_task3 -type f -delete
 
 source /home/dominikp/Desktop/robot-vision-SS-2026/A1/unimatch/a1env/bin/activate
@@ -25,4 +26,6 @@ deactivate
 
 source /home/dominikp/Desktop/robot-vision-SS-2026/A3/venvs/Unidepth/bin/activate
 
+python3 assign3_task1.py
+python3 assign3_task2.py
 python3 assign3_task3.py
